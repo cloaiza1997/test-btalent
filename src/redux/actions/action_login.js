@@ -10,7 +10,6 @@ import { action_load } from "./action_load";
  */
 export const action_request_login = (data) => (dispatch) => {
   dispatch(action_load(true));
-  console.log("log");
   // Ejecuta la llamada al login
   return global_state.func
     .axiosFunc("POST", "test_users_login", data)

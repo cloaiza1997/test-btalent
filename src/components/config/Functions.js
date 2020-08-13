@@ -19,7 +19,6 @@ export default class Functions extends Component {
       .then((response) => response)
       .catch((error) => ({ error: error }));
   }
-
   /**
    * Obtiene el usuario almacenado en el localStorage y lo agrega al estado global
    */
@@ -34,6 +33,9 @@ export default class Functions extends Component {
     return data;
   }
 
+
+
+  
   /**
    * Calcula la fecha del día actual
    * @return {string} date Fecha en formado YYYY-MM-DD

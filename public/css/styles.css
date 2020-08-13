@@ -130,8 +130,7 @@ body, #root {
   .makeStyles-drawerClose-8,
   .jss8,
   .makeStyles-drawerClose-29,
-  .jss29,
-  .MuiDrawer-paperAnchorLeft {
+  .jss29 {
     width: 58px !important;
   }
 
@@ -327,7 +326,7 @@ input[type=number] {
 }
 
 main {
-  height: 600px !important;
+  height: 650px !important;
 }
 
 .div-dataTable {
@@ -336,4 +335,19 @@ main {
 
 th {
   background-color: #282831 !important;
+  color: white !important;
+  font-weight: "bold";
+}
+
+td {
+  color: white !important;
+  padding: 2px !important;
+}
+
+.MuiInputBase-input {
+  color: white !important;
+}
+
+.MuiListItemText-primary {
+  text-decoration: none !important;
 }

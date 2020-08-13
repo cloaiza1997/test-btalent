@@ -9,7 +9,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { action_login } from "../../redux/actions/action_login";
 // Class
 import UserCreate from "./views/UserCreate";
-import UserEdit from "./views/UserEdit";
 import UserList from "./views/UserList";
 import Profile from "./views/Profile";
 // Components
@@ -67,9 +66,6 @@ export default function Home({
     switch (url) {
       case "create":
         // component_view = <UserCreate/>
-        break;
-      case "edit":
-        // component_view = <UserEdit renderSection={renderSection}/>
         break;
       case "list":
         component_view = <UserList renderSection={renderSection} />;

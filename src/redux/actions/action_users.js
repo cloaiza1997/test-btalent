@@ -12,7 +12,7 @@ export const action_request_delete = (data) => (dispatch) => {
   dispatch(action_load(true));
   // Ejecuta la llamada al login
   return global_state.func
-    .axiosFunc("DEL", "test_users_delete", data, {})
+    .axiosFunc("DELETE", "test_users_delete", data, {})
     .then((response) => {
       // + Error | - Ok
       if (response.error) {
@@ -21,9 +21,11 @@ export const action_request_delete = (data) => (dispatch) => {
         console.error("Error Login:", response.error);
         data = { load: false };
       } else {
-        // Obtiene los datos del login
-        dispatch(action_load(false));
-        dispatch(action_get_list(response.data.content.users));
+        global_state.showNotify().success("Usuario eliminado correctamente");
+        setTimeout(() => {
+          dispatch(action_load(false));
+          window.location.reload();
+        }, 2000);
       }
     });
 };
@@ -32,11 +34,18 @@ export const action_request_delete = (data) => (dispatch) => {
  * @param {object} data Objeto con el listado de usuarios
  * @return {function} Ejecuta el llamado asincrónico
  */
-export const action_request_list = (data, users_list = [], page = 1) => (dispatch) => {
+export const action_request_list = (data, users_list = [], page = 1) => (
+  dispatch
+) => {
   dispatch(action_load(true));
   // Ejecuta la llamada al login
   global_state.func
-    .axiosFunc("GET", "test_users_list?page=" + page, {}, { "X-Auth-Token": data.token })
+    .axiosFunc(
+      "GET",
+      "test_users_list?page=" + page,
+      {},
+      { "X-Auth-Token": data.token }
+    )
     .then((response) => {
       // + Error | - Ok
       if (response.error) {
@@ -45,21 +54,17 @@ export const action_request_list = (data, users_list = [], page = 1) => (dispatc
         console.error("Error Login:", response.error);
         data = { load: false };
       } else {
-
         let users = response.data.content.users;
 
+        users_list.push(...users);
 
-          users_list.push(...users);
-
-          if (users.length > 0) {
-            // dispatch(action_request_list(data, users_list, page + 1));
-          } else {
-            
-            // Obtiene los datos del login
-            dispatch(action_load(false));
-            
-          }
+        if (users.length > 0) {
+          dispatch(action_request_list(data, users_list, page + 1));
+        } else {
+          // Obtiene los datos del login
+          dispatch(action_load(false));
           dispatch(action_get_list(users_list));
+        }
       }
     });
 };

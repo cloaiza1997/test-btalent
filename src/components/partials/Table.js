@@ -497,16 +497,7 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const Table = ({ data, deleteItems }) => {
-  console.log(data);
-
-  // const headCells = [
-  //   { id: "first_name", numeric: false, disablePadding: true, label: "Nombre" },
-  //   { id: "last_name", numeric: false, disablePadding: true, label: "Apellido" },
-  //   { id: "email", numeric: false, disablePadding: true, label: "Email" },
-  //   { id: "company", numeric: false, disablePadding: true, label: "Compañía" },
-  // ];
-
+const Table = ({ data, confirmDelete }) => {
   const [state, setState] = React.useState({
     columns: [
       { title: "Nombre", field: "first_name" },
@@ -516,14 +507,14 @@ const Table = ({ data, deleteItems }) => {
     ],
     data: data,
   });
-  console.log(state.data, data);
+
   return (
     <MaterialTable
       icons={tableIcons}
-      title="Editable Example"
+      title="Listado de Usuarios"
       columns={state.columns}
       data={state.data}
-      draggable={false}
+      draggable="false"
       localization={{
         body: {
           editRow: {
@@ -531,10 +522,12 @@ const Table = ({ data, deleteItems }) => {
             saveTooltip: "Confirmar",
             cancelTooltip: "Cancelar",
           },
+          emptyDataSourceMessage: "No hay registros que coincidan",
           deleteTooltip: "Eliminar",
         },
         header: { actions: "Eliminar" },
         pagination: {
+          labelDisplayedRows: "{from}-{to} de {count}",
           labelRowsSelect: "filas",
           labelRowsPerPage: "Filas por página:",
           firstAriaLabel: "Primera",
@@ -546,12 +539,23 @@ const Table = ({ data, deleteItems }) => {
           lastAriaLabel: "Última",
           lastTooltip: "Última",
         },
+        toolbar: {
+          searchTooltip: "Búscar",
+          searchPlaceholder: "Búscar",
+        },
       }}
-      editable={{
-        onRowDelete: (oldData) =>
-          new Promise((resolve) => {
-            console.log(resolve);
-          }),
+      actions={[
+        (rowData) => ({
+          icon: tableIcons.Delete,
+          tooltip: "Eliminar Usuario",
+          onClick: (event, rowData) => {
+            confirmDelete(rowData);
+          },
+          disabled: rowData.birthYear < 2000,
+        }),
+      ]}
+      options={{
+        actionsColumnIndex: -1,
       }}
     />
   );

@@ -1,87 +1,64 @@
 import React, { useState } from "react";
-import { useGlobal, setGlobal } from "reactn";
-
+import { useGlobal } from "reactn";
+import { useEffect } from "react";
+// Redux
+import { useDispatch, useSelector } from "react-redux";
+// Class
+import { Notify } from "../../partials/Notify";
+import Confirm from "./../../partials/Confirm";
+import Table from "../../partials/Table";
+// Components
 import CircularProgress from "@material-ui/core/CircularProgress";
+// Actions
+import {
+  action_request_list,
+  action_request_delete,
+} from "../../../redux/actions/action_users";
 
 import $ from "jquery";
 
-import Table from "../../partials/Table";
-import { Notify, showNotify } from "../../partials/Notify";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-
-import { action_request_list, action_request_delete } from "../../../redux/actions/action_users";
-
 const UserList = () => {
+  const [globalState] = useGlobal();
+  const [id_delete, setIdDelete] = useState(0); // Id de usuario a eliminar
+  const [open, setOpen] = useState(false); // Controla el modal de confirmación
+  const dispatch = useDispatch();
   const display_load = useSelector(
     ({ reducer_state_load: { display_load } }) => display_load
-  );
-  const [globalState] = useGlobal();
-  const dispatch = useDispatch();
-
-  const deleteItems = (id) => {
-    console.log(id);
+  ); // Controla el load
+  /**
+   * Muestra la ventana de confirmación de eliminación
+   * @param {object} user Usuario a eliminar 
+   */
+  const confirmDelete = (user) => {
+    setOpen(true); // Abre el modal
+    setIdDelete(user.id); // Agrega el id al estado
+  };
+  /**
+   * Elimina un usuario en base al id
+   */
+  const deleteUser = () => {
+    console.log(id_delete);
     let data = {
-      user_id: id,
+      user_id: id_delete,
     };
     dispatch(action_request_delete(data));
-    // items.map((id) => this.state.db.child(id).remove());
-    // showNotify().success("Usuario(s) eliminado(s) correctamente");
-    // setTimeout(() => {
-    //   window.location.reload();
-    // }, 2000);
   };
-
-  const edit = (id) => {
-    setGlobal({ user_edit_id: id });
-    this.props.changeView("edit");
-  };
-
   // Extracción del componente con la lista de usuarios
   const table = useSelector(({ reducer_state_users: { users } }) => {
-    let list = [];
-    // De estado se obtiene la lista y esta se recorre para convertir en arreglo
-    // $.each(users, function (key, element) {
-    //   list.push(element);
-    // });
-    console.log(users);
-    let table = !$.isEmptyObject(users) ? <Table data={users} deleteItems={deleteItems} /> : "";
-
+    // + El objeto está lleno se retorna el componente Table, se pasa la función de confirmación
+    let table = !$.isEmptyObject(users) ? (
+      <Table data={users} confirmDelete={confirmDelete} />
+    ) : (
+      ""
+    );
     return table;
   });
-
+  /**
+   * Se consultan los datos de la API
+   */
   useEffect(() => {
     dispatch(action_request_list(globalState));
   }, []);
-
-  //   constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     db: this.global.func.initDataBase("users"),
-  //     display: true,
-  //     table: [],
-  //   }
-  // }
-
-  // componentDidMount() {
-  //   this.state.db.on("value", snap => {
-  //     let list = [];
-  //     $.each(snap.val(), function (key, element) {
-  //       list.push({
-  //         id: key,
-  //         name: element.name
-  //       });
-  //     });
-
-  //     this.setState({
-  //       table: null
-  //     });
-  //     this.setState({
-  //       table: <Table data={list} deleteItems={this.deleteItems} edit={this.edit}/>,
-  //       display: false,
-  //     });
-  //   });
-  // }
 
   return (
     <div className="div-dataTable div-usr-create">
@@ -91,7 +68,7 @@ const UserList = () => {
         <br />
       </div>
       {table}
-      <div style={{ height: 20 }}></div>
+      <div style={{ height: 10 }}></div>
       <div className="flx center lbl-hide" style={{ display: "none" }}>
         <img
           src={require("./../../../assets/img/scroll.gif")}
@@ -103,8 +80,14 @@ const UserList = () => {
           Desliza sobre la tabla para desplazarte lateralmente en su contenido
         </label>
       </div>
-      <div style={{ height: 20 }}></div>
+      <div style={{ height: 10 }}></div>
       <Notify />
+      <Confirm
+        open={open}
+        setOpen={setOpen}
+        action={deleteUser}
+        message="¿Confirma eliminar usuario?"
+      />
     </div>
   );
 };

@@ -2,6 +2,10 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
+/**
+ * Abre un modal de confirmación
+ * @param {*} props 
+ */
 export default function Confirm(props) {
 
   const handleClose = () => {
