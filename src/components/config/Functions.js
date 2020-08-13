@@ -1,7 +1,7 @@
 import { Component, setGlobal } from "reactn";
 import axios from "axios";
 
-export default class Function extends Component {
+export default class Functions extends Component {
   /**
    * Realiza llamadas asíncronas
    * @param {get,post,put,delete} method Método de envío
@@ -9,14 +9,29 @@ export default class Function extends Component {
    * @param {objet} data Objeto con los datos a enviar a la petición
    * @return {axios}
    */
-  axiosFunc(method = "get", url = "", data = {}) {
+  axiosFunc(method = "get", url = "", data = {}, headers = {}) {
     return axios({
       method: method,
       url: this.global.url + url,
-      data: data,
+      data,
+      headers
     })
       .then((response) => response)
       .catch((error) => ({ error: error }));
+  }
+
+  /**
+   * Obtiene el usuario almacenado en el localStorage y lo agrega al estado global
+   */
+  getUser() {
+    let data = localStorage.getItem("data");
+    // Si existe el usuario lo parsea y agrega al estado global
+    if (data != null) {
+      data = JSON.parse(data);
+      setGlobal({...data});
+    };
+
+    return data;
   }
 
   /**

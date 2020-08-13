@@ -1,7 +1,11 @@
 import Functions from "./Functions";
+import { showNotify } from "../../components/partials/Notify";
 
 export default {
+  url: "http://ikc.vectorialgroup.com/", // URL API
   func: new Functions(), // Biblioteca de funciones
-  user: null, // Objeto del usuario logueado de google
-  url: "http://ikc.vectorialgroup.com/",
+  showNotify, // Mostrar notificaciones
+  login: false,
+  token: "",
+  user: {}
 };

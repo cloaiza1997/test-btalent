@@ -1,40 +1,54 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
 // Redux
 import { useSelector, useDispatch } from "react-redux";
 // Actions
 import { action_request_login } from "../../redux/actions/action_login";
-// Componetes
+// Partials
+import { Notify } from "../partials/Notify";
+import history from "../router/History";
+// Material UI
 import TextField from "@material-ui/core/TextField";
+import CircularProgress from "@material-ui/core/CircularProgress";
 // Íconos
 import LockIcon from "@material-ui/icons/Lock";
 import PersonIcon from "@material-ui/icons/Person";
 
 export default function Login() {
-
+  // * Constants
   const [user, setUser] = useState("");
   const [pass, setPass] = useState("");
-
   const dispatch = useDispatch();
-
+  // * Hooks
+  const display_load = useSelector(
+    ({ reducer_state_login: { login }, reducer_state_load: { display_load } }) => {
+      // + Sesión iniciada
+      if (login) {
+        history.push("/list");
+      }
+      return display_load;
+    }
+  );
+  // * Functions
+  /**
+   * Realiza la petición de inicio de sesión
+   */
   const login = () => {
+    // setDisplay(true);
     let data = {
       user: user,
       pass: pass,
     };
+    // Ejecuta la acción de petición de login
     dispatch(action_request_login(data));
   };
 
-  const data = useSelector((state) => {
-    if(state.login) {
-
-    } else {
-      
-    }
-  });
-
   return (
     <div className="login">
+      <Notify />
+      <div className="flx center">
+        <CircularProgress style={display_load ? {} : { display: "none" }} />
+        <br />
+      </div>
       <div className="logo">
         <img
           src={require("./../../assets/img/search.png")}

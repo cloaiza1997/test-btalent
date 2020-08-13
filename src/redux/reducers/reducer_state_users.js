@@ -1,28 +1,22 @@
 import * as Types from "../actions/actionTypes";
 
 const initialState = {
-  login: false,
-  user: {},
-  token: "",
-  load: false,
+  users: {}
 };
 /**
  * Cambia los estados dependiendo de la acción
- * @param {object} state Estado de la aplicación 
+ * @param {object} state Estado de la aplicación
  * @param {object} action Acción ejecutada
  */
-const reducer_state_login = (state = initialState, action) => {
+const reducer_state_list = (state = initialState, action) => {
   switch (action.type) {
-    // Inicio de sesión
-    case Types.LOGIN: {
+    // Listado de usuarios
+    case Types.USER_LIST: {
       // Se extraen los datos de la acción
       let data = action.payload;
       return {
         ...state,
-        login: data.login,
-        user: data.user,
-        token: data.token,
-        load: false,
+        users: data.users
       };
     }
     default: {
@@ -31,4 +25,4 @@ const reducer_state_login = (state = initialState, action) => {
   }
 };
 
-export default reducer_state_login;
+export default reducer_state_list;

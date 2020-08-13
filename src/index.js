@@ -1,19 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { setGlobal } from "reactn";
 import * as serviceWorker from "./serviceWorker";
-import Router from "./components/router/Router";
+import RouterComponent from "./components/router/Router";
 // Redux
 import { Provider } from "react-redux";
 import store from "./redux/store";
 // Estados globales
 import GlobalState from "./components/config/GlobalState";
+import { setGlobal } from "reactn";
 
 setGlobal(GlobalState);
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router />
+    <RouterComponent />
   </Provider>,
   document.getElementById("root")
 );
