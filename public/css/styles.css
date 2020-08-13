@@ -325,3 +325,15 @@ input[type=number] {
 .dash-div-2 h3, .dash-div-2 h1 {
   color: #222;
 }
+
+main {
+  height: 600px !important;
+}
+
+.div-dataTable {
+  width: 800px;
+}
+
+th {
+  background-color: #282831 !important;
+}

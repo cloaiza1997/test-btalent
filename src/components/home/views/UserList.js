@@ -91,6 +91,7 @@ const UserList = () => {
         <br />
       </div>
       {table}
+      <div style={{ height: 20 }}></div>
       <div className="flx center lbl-hide" style={{ display: "none" }}>
         <img
           src={require("./../../../assets/img/scroll.gif")}
@@ -102,6 +103,7 @@ const UserList = () => {
           Desliza sobre la tabla para desplazarte lateralmente en su contenido
         </label>
       </div>
+      <div style={{ height: 20 }}></div>
       <Notify />
     </div>
   );

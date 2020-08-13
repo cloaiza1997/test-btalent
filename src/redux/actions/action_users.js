@@ -48,24 +48,18 @@ export const action_request_list = (data, users_list = [], page = 1) => (dispatc
 
         let users = response.data.content.users;
 
-        // console.log(users_list);
 
           users_list.push(...users);
-          // console.log(users_list);
-          // users_list = {...users_list, ...users};
-          
-          // console.log({ ...users_list, ...users });
+
           if (users.length > 0) {
-            // console.log(page);
-            dispatch(action_request_list(data, users_list, page + 1));
+            // dispatch(action_request_list(data, users_list, page + 1));
           } else {
             
             // Obtiene los datos del login
             dispatch(action_load(false));
-            dispatch(action_get_list(users_list));
-  
-          // console.log(users_list);
-        }
+            
+          }
+          dispatch(action_get_list(users_list));
       }
     });
 };
