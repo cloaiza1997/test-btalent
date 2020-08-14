@@ -7,18 +7,26 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   action_get_local_users,
   action_set_local_users,
+  action_request_save,
 } from "../../../redux/actions/action_users";
 // class
 import { Notify, showNotify } from "../../partials/Notify";
 import Confirm from "./../../partials/Confirm";
 // Components
-import TextField from "@material-ui/core/TextField";
-import EmailTwoToneIcon from "@material-ui/icons/EmailTwoTone";
-import PermIdentityTwoToneIcon from "@material-ui/icons/PermIdentityTwoTone";
+import { makeStyles } from "@material-ui/core/styles";
 import BusinessIcon from "@material-ui/icons/Business";
+import EmailTwoToneIcon from "@material-ui/icons/EmailTwoTone";
+import FormControl from "@material-ui/core/FormControl";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import PermIdentityTwoToneIcon from "@material-ui/icons/PermIdentityTwoTone";
+import Select from "@material-ui/core/Select";
+import TextField from "@material-ui/core/TextField";
 
 export default function UserCreate() {
   const dispatch = useDispatch();
+  const classes = useStyles();
   const [globalState] = useGlobal();
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
@@ -35,9 +43,22 @@ export default function UserCreate() {
   }, []);
   // * Functions
   /**
-   * Agrega un usuario en firebase
+   * Creación del usuario en el API
    */
   const addUser = () => {
+    let data = {
+      first_name,
+      last_name,
+      email,
+      company,
+    };
+    // Actualiza el estado con los nuevos datos
+    dispatch(action_request_save(data));
+  };
+  /**
+   * Agrega un usuario en el local storage
+   */
+  const addUserLocal = () => {
     // Obtiene el arreglo de usuarios
     let users = users_local;
     // + Vacío: Se inicializa
@@ -77,7 +98,7 @@ export default function UserCreate() {
     if (
       validateText(first_name) &&
       validateText(last_name) &&
-      validateText(company) &&
+      company &&
       validateEmail(email)
     ) {
       setOpen(true);
@@ -149,7 +170,7 @@ export default function UserCreate() {
       </div>
       <br />
       <div className="flex w-100">
-        <BusinessIcon className="f-2_5r" />
+        {/* <BusinessIcon className="f-2_5r" />
         <TextField
           variant="outlined"
           type="text"
@@ -158,7 +179,25 @@ export default function UserCreate() {
           name="company"
           value={company}
           onChange={(company) => setCompany(company.target.value)}
-        />
+        /> */}
+        <BusinessIcon className="f-2_5r" />
+        <FormControl
+          variant="outlined"
+          className={(classes.formControl, "input")}
+        >
+          <InputLabel id="demo-simple-select-outlined-label">
+            Compañía
+          </InputLabel>
+          <Select
+            labelId="demo-simple-select-outlined-label"
+            id="demo-simple-select-outlined"
+            value={company}
+            onChange={(company) => setCompany(company.target.value)}
+          >
+            <MenuItem value=""></MenuItem>
+            <MenuItem value={1}>Providencia</MenuItem>
+          </Select>
+        </FormControl>
       </div>
       <br />
       <button onClick={openModal} className="btn-rnd-i" title="Crear Usuario">
@@ -183,3 +222,13 @@ export default function UserCreate() {
     </div>
   );
 }
+
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));

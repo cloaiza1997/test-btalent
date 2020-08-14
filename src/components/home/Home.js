@@ -173,7 +173,7 @@ export default function Home({
                   style={{ backgroundImage: `url(${user.avatar})` }}
                 ></div>
               </ListItemIcon>
-              <span className="p-10x"></span>
+              <span className="p-15x"></span>
               <ListItemText primary={user.name} />
             </ListItem>
           </Link>
@@ -185,17 +185,17 @@ export default function Home({
               <ListItemIcon>
                 <PersonAddTwoToneIcon className="f-2_5r" />
               </ListItemIcon>
-              <span className="p-10x"></span>
+              <span className="p-15x"></span>
               <ListItemText primary="Crear Usuario" />
             </ListItem>
           </Link>
 
           <Link to="list">
-            <ListItem button title="Ver Listado de Usuario">
+            <ListItem button title="Ver Listado de Usuarios">
               <ListItemIcon>
                 <PeopleAltTwoToneIcon className="f-2_5r" />
               </ListItemIcon>
-              <span className="p-10x"></span>
+              <span className="p-15x"></span>
               <ListItemText primary="Listar Usuarios" />
             </ListItem>
           </Link>

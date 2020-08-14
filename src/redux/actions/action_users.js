@@ -4,6 +4,32 @@ import global_state from "../../components/config/GlobalState";
 // Actions
 import { action_load } from "./action_load";
 /**
+ * Crea un usuario en el API
+ * @param {object} data Datos del usuario a crear 
+ */
+export const action_request_save = (data) => (dispatch) => {
+  dispatch(action_load(true));
+  // Ejecuta la llamada al login
+  return global_state.func
+    .axiosFunc("POST", "test_users_new", data, {})
+    .then((response) => {
+      // + Error | - Ok
+      if (response.error) {
+        // Muestra notificación de error
+        global_state
+          .showNotify()
+          .error("Ocurrió un error al crear usuario. Prueba utilizando otro Email");
+        console.error("Error Login:", response.error);
+      } else {
+        global_state.showNotify().success("Usuario creado correctamente");
+        setTimeout(() => {
+          window.location.reload();
+          dispatch(action_load(false));
+        }, 2000);
+      }
+    });
+};
+/**
  * Realiza la petición para eliminar usuarios de la API
  * @param {object} data Objeto con el listado de id de usuarios
  * @return {function} Ejecuta el llamado asincrónico
