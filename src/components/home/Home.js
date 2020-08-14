@@ -249,6 +249,9 @@ const useStyles = makeStyles((theme) => ({
     flexShrink: 0,
     whiteSpace: "nowrap",
   },
+  drawerWidth: {
+    width: 58
+  },
   drawerOpen: {
     width: drawerWidth,
     transition: theme.transitions.create("width", {
