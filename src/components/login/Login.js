@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useGlobal } from "reactn";
 // Redux
 import { useSelector, useDispatch } from "react-redux";
 // Actions
 import { action_request_login } from "../../redux/actions/action_login";
+import { action_load } from "../../redux/actions/action_load";
 // Partials
-import { Notify } from "../partials/Notify";
+import { Notify, showNotify } from "../partials/Notify";
 import history from "../router/History";
 // Material UI
 import TextField from "@material-ui/core/TextField";
@@ -15,12 +17,16 @@ import PersonIcon from "@material-ui/icons/Person";
 
 export default function Login() {
   // * Constants
+  const [globalState] = useGlobal();
   const [user, setUser] = useState("");
   const [pass, setPass] = useState("");
   const dispatch = useDispatch();
   // * Hooks
   const display_load = useSelector(
-    ({ reducer_state_login: { login }, reducer_state_load: { display_load } }) => {
+    ({
+      reducer_state_login: { login },
+      reducer_state_load: { display_load },
+    }) => {
       // + Sesión iniciada
       if (login) {
         history.push("/list");
@@ -28,18 +34,28 @@ export default function Login() {
       return display_load;
     }
   );
+  // Se oculta el load
+  dispatch(action_load(false));
   // * Functions
   /**
    * Realiza la petición de inicio de sesión
    */
   const login = () => {
-    // setDisplay(true);
-    let data = {
-      user: user,
-      pass: pass,
-    };
-    // Ejecuta la acción de petición de login
-    dispatch(action_request_login(data));
+    // Extracción de métodos de validación de datos
+    const validateText = globalState.func.validateText;
+    // + Datos correctos | - Datos incorrectos
+    if (validateText(user) && validateText(pass)) {
+      let data = {
+        user: user,
+        pass: pass,
+      };
+      // Ejecuta la acción de petición de login
+      dispatch(action_request_login(data));
+    } else {
+      showNotify().error(
+        "Por favor diligenciar todos los campos correctamente"
+      );
+    }
   };
 
   return (

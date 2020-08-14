@@ -8,9 +8,10 @@ import { useSelector, useDispatch } from "react-redux";
 // Actions
 import { action_login } from "../../redux/actions/action_login";
 // Class
+import ErrorPage from "../error/ErrorPage";
+import Profile from "./views/Profile";
 import UserCreate from "./views/UserCreate";
 import UserList from "./views/UserList";
-import Profile from "./views/Profile";
 // Components
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -34,7 +35,7 @@ import PersonAddTwoToneIcon from "@material-ui/icons/PersonAddTwoTone";
 import PowerSettingsNewTwoToneIcon from "@material-ui/icons/PowerSettingsNewTwoTone";
 /**
  * Vista principal
- * @param {*} url Extrae de las props la url digitada 
+ * @param {*} url Extrae de las props la url digitada
  */
 export default function Home({
   match: {
@@ -65,16 +66,16 @@ export default function Home({
     let component_view = "";
     switch (url) {
       case "create":
-        // component_view = <UserCreate/>
+        component_view = <UserCreate />;
         break;
       case "list":
-        component_view = <UserList renderSection={renderSection} />;
+        component_view = <UserList />;
         break;
       case "profile":
         component_view = <Profile user={user} />;
         break;
       default:
-        component_view = <div>error</div>;
+        component_view = <ErrorPage />;
         break;
     }
     return component_view;
@@ -138,20 +139,20 @@ export default function Home({
         <div className={classes.toolbar}>
           <div className="div-logo">
             <a
-              href="https://wacoservices.com/"
+              href="https://btalentconsultores.com/"
               target="_blank"
               rel="noopener noreferrer"
               className="o-7x"
-              title="Ir a la página de Waco Services"
+              title="Ir a la página de BTalent Consultores"
             >
               <img
                 className="w-50x"
                 src={require("../../assets/img/logo-small.png")}
-                alt="Waco Services"
+                alt="BTalent"
               />
             </a>
             <span className="p-5x"></span>
-            <h5 className="m-0x">Waco Services Test</h5>
+            <h5 className="m-0x">BTalent - Vectorial</h5>
           </div>
           <IconButton onClick={handleDrawerClose} title="Minimizar Menú">
             {theme.direction === "rtl" ? (
@@ -179,24 +180,18 @@ export default function Home({
         </List>
         <Divider />
         <List>
-          <ListItem
-            button
-            title="Crear un Usuario"
-            onClick={() => renderSection("create")}
-          >
-            <ListItemIcon>
-              <PersonAddTwoToneIcon className="f-2_5r" />
-            </ListItemIcon>
-            <span className="p-10x"></span>
-            <ListItemText primary="Crear Usuario" />
-          </ListItem>
+          <Link to="create">
+            <ListItem button title="Crear un Usuario">
+              <ListItemIcon>
+                <PersonAddTwoToneIcon className="f-2_5r" />
+              </ListItemIcon>
+              <span className="p-10x"></span>
+              <ListItemText primary="Crear Usuario" />
+            </ListItem>
+          </Link>
 
           <Link to="list">
-            <ListItem
-              button
-              title="Ver Listado de Usuario"
-              onClick={() => renderSection("list")}
-            >
+            <ListItem button title="Ver Listado de Usuario">
               <ListItemIcon>
                 <PeopleAltTwoToneIcon className="f-2_5r" />
               </ListItemIcon>

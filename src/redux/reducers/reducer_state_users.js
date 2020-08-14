@@ -1,7 +1,8 @@
 import * as Types from "../actions/actionTypes";
 
 const initialState = {
-  users: {}
+  users: {},
+  users_local: {}
 };
 /**
  * Cambia los estados dependiendo de la acción
@@ -16,7 +17,23 @@ const reducer_state_list = (state = initialState, action) => {
       let data = action.payload;
       return {
         ...state,
-        users: data.users
+        users: data.users,
+      };
+    }
+    // Listado de usuarios locales
+    case Types.USER_LOCAL: {
+      // Se extraen los datos de la acción
+      let data = action.payload;
+      return {
+        ...state,
+        users_local: data.users_local,
+      };
+    }
+    // Vaciar lista de usuarios
+    case Types.USER_CLEAR: {
+      return {
+        ...state,
+        users: {},
       };
     }
     default: {

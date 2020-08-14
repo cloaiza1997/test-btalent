@@ -1,98 +1,124 @@
-import React, { useState } from 'react';
-import { useGlobal } from 'reactn';
-
-import TextField from '@material-ui/core/TextField';
-
+import React, { useState } from "react";
+import { useGlobal } from "reactn";
+import { useEffect } from "react";
+// Redux
+import { useDispatch, useSelector } from "react-redux";
+// Actions
+import {
+  action_get_local_users,
+  action_set_local_users,
+} from "../../../redux/actions/action_users";
+// class
 import { Notify, showNotify } from "../../partials/Notify";
-
-import AssignmentIndTwoToneIcon from '@material-ui/icons/AssignmentIndTwoTone';
-import DateRangeTwoToneIcon from '@material-ui/icons/DateRangeTwoTone';
-import EmailTwoToneIcon from '@material-ui/icons/EmailTwoTone';
-import PermIdentityTwoToneIcon from '@material-ui/icons/PermIdentityTwoTone';
-
 import Confirm from "./../../partials/Confirm";
+// Components
+import TextField from "@material-ui/core/TextField";
+import EmailTwoToneIcon from "@material-ui/icons/EmailTwoTone";
+import PermIdentityTwoToneIcon from "@material-ui/icons/PermIdentityTwoTone";
+import BusinessIcon from "@material-ui/icons/Business";
 
 export default function UserCreate() {
-
+  const dispatch = useDispatch();
   const [globalState] = useGlobal();
-  const [date] = useState(globalState.func.getDate());
-  const [birth, setBirth] = useState(date);
-  const [db] = useState(globalState.func.initDataBase("users"));
+  const [first_name, setFirstName] = useState("");
+  const [last_name, setLastName] = useState("");
+  const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
-  const [id, setId] = useState("");
-  const [name, setName] = useState("");
   const [open, setOpen] = useState(false);
-  // Functions
+  const users_local = useSelector(
+    ({ reducer_state_users: { users_local } }) => users_local
+  );
+  // * Hooks
+  useEffect(() => {
+    // Extracción del estado de usuarios
+    dispatch(action_get_local_users());
+  }, []);
+  // * Functions
   /**
    * Agrega un usuario en firebase
    */
   const addUser = () => {
-      // Consulta si ya existe un objeto en la base de datos con el id
-      db.child(id).once("value", snap => {
-        // + Id no existe, se inserta el objeto | - Existe, se muestra notificación
-        if (snap.val() == null) {
-          db.child(id).set({
-            name: name,
-            email: email,
-            birth: birth,
-          });
-          showNotify().success("Usuario creado correctamente");
-          // Limpieza de campos
-          setId("");
-          setName("");
-          setEmail("");
-          setBirth(date);
-        } else {
-          showNotify().error("La cédula ya se encuentra registrada");
-        }
-      });
-      
-      db.off();
-  }
+    // Obtiene el arreglo de usuarios
+    let users = users_local;
+    // + Vacío: Se inicializa
+    if (users == null) {
+      users = [];
+    }
+    // Consecutivo para el id
+    let cant = users.length;
 
+    let data = {
+      id: "user_" + (cant + 1),
+      first_name,
+      last_name,
+      email,
+      company: {
+        name: company,
+      },
+    };
+    // Agrega el usuario al arreglo del local storage
+    users.push(data);
+    // Actualiza el estado con los nuevos datos
+    dispatch(action_set_local_users(users));
+
+    showNotify().success("Usuario creado correctamente");
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+  };
+  /**
+   * Abre una ventana modal
+   */
   const openModal = () => {
     // Extracción de métodos de validación de datos
     const validateEmail = globalState.func.validateEmail;
     const validateText = globalState.func.validateText;
     // + Datos correctos | - Datos incorrectos
-    if (validateText(id) && validateText(name) && validateEmail(email)) {
+    if (
+      validateText(first_name) &&
+      validateText(last_name) &&
+      validateText(company) &&
+      validateEmail(email)
+    ) {
       setOpen(true);
     } else {
-      showNotify().error("Por favor diligenciar todos los campos");
+      showNotify().error(
+        "Por favor diligenciar todos los campos correctamente"
+      );
     }
-  }
+  };
 
   return (
     <div className="flx div-usr-create">
       <div>
         <img
-            src={require("./../../../assets/img/user_1.png")}
-            alt="Usuario"
-            className="w-50x"
-          />
-          <img
-            src={require("./../../../assets/img/user_3.png")}
-            alt="Usuario"
-            className="w-50x"
-          />
-          <img
-            src={require("./../../../assets/img/user_2.png")}
-            alt="Usuario"
-            className="w-50x"
-          />
+          src={require("./../../../assets/img/user_1.png")}
+          alt="Usuario"
+          className="w-50x"
+        />
+        <img
+          src={require("./../../../assets/img/user_3.png")}
+          alt="Usuario"
+          className="w-50x"
+        />
+        <img
+          src={require("./../../../assets/img/user_2.png")}
+          alt="Usuario"
+          className="w-50x"
+        />
       </div>
       <h2>Creación de Usuario</h2>
       <br />
       <div className="flex w-100">
-        <AssignmentIndTwoToneIcon className="f-2_5r" />
+        <PermIdentityTwoToneIcon className="f-2_5r" />
         <TextField
           variant="outlined"
-          type="number"
+          type="text"
           className="input"
-          label="Número de Identidad"
-          name="id"
-          value={id}
-          onChange={(id) => setId(id.target.value)}
+          label="Nombre"
+          name="first_name"
+          value={first_name}
+          onChange={(first_name) => setFirstName(first_name.target.value)}
         />
       </div>
       <br />
@@ -102,10 +128,10 @@ export default function UserCreate() {
           variant="outlined"
           type="text"
           className="input"
-          label="Nombre"
-          name="name"
-          value={name}
-          onChange={(name) => setName(name.target.value)}
+          label="Apellido"
+          name="last_name"
+          value={last_name}
+          onChange={(last_name) => setLastName(last_name.target.value)}
         />
       </div>
       <br />
@@ -123,15 +149,15 @@ export default function UserCreate() {
       </div>
       <br />
       <div className="flex w-100">
-        <DateRangeTwoToneIcon className="f-2_5r" />
+        <BusinessIcon className="f-2_5r" />
         <TextField
           variant="outlined"
-          type="date"
+          type="text"
           className="input"
-          label="Fecha de Nacimiento"
-          name="birth"
-          value={birth}
-          onChange={(birth) => setBirth(birth.target.value)}
+          label="Companía"
+          name="company"
+          value={company}
+          onChange={(company) => setCompany(company.target.value)}
         />
       </div>
       <br />
@@ -148,7 +174,12 @@ export default function UserCreate() {
       </button>
 
       <Notify />
-      <Confirm open={open} setOpen={setOpen} action={addUser} message="¿Confirma la creación del usuario?"/>
+      <Confirm
+        open={open}
+        setOpen={setOpen}
+        action={addUser}
+        message="¿Confirma la creación del usuario?"
+      />
     </div>
   );
 }

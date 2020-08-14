@@ -13,6 +13,9 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import {
   action_request_list,
   action_request_delete,
+  action_get_local_users,
+  action_set_local_users,
+  action_clean_list,
 } from "../../../redux/actions/action_users";
 
 import $ from "jquery";
@@ -27,21 +30,47 @@ const UserList = () => {
   ); // Controla el load
   /**
    * Muestra la ventana de confirmación de eliminación
-   * @param {object} user Usuario a eliminar 
+   * @param {object} user Usuario a eliminar
    */
   const confirmDelete = (user) => {
     setOpen(true); // Abre el modal
     setIdDelete(user.id); // Agrega el id al estado
   };
+
+  const users_local = useSelector(
+    ({ reducer_state_users: { users_local } }) => users_local
+  );
   /**
    * Elimina un usuario en base al id
    */
   const deleteUser = () => {
-    console.log(id_delete);
-    let data = {
-      user_id: id_delete,
-    };
-    dispatch(action_request_delete(data));
+    // Validación del id
+    let local = /user_/.test(id_delete);
+    // + Se identifica que es un usuario del local storage | - Se elimina de la API
+    if (local) {
+      // Se crea un nuevo arrego
+      let new_users_local = [];
+      // Se recorre el arrego actual
+      users_local.forEach((user) => {
+        // Se añaden al nuevo arreglo los elementos que no coincidan con el id
+        if (user.id !== id_delete) {
+          new_users_local.push(user);
+        }
+      });
+      // Se actualiza el estado
+      dispatch(action_set_local_users(new_users_local));
+
+      globalState.showNotify().success("Usuario eliminado correctamente");
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } else {
+      let data = {
+        user_id: id_delete,
+      };
+
+      dispatch(action_request_delete(data));
+    }
   };
   // Extracción del componente con la lista de usuarios
   const table = useSelector(({ reducer_state_users: { users } }) => {
@@ -57,6 +86,11 @@ const UserList = () => {
    * Se consultan los datos de la API
    */
   useEffect(() => {
+    // Se limpia la lista
+    dispatch(action_clean_list());
+    // Se pasan los usuarios locales al estado
+    dispatch(action_get_local_users());
+    // Se consulta la lista
     dispatch(action_request_list(globalState));
   }, []);
 

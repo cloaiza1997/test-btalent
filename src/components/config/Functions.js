@@ -32,23 +32,6 @@ export default class Functions extends Component {
 
     return data;
   }
-
-
-
-  
-  /**
-   * Calcula la fecha del día actual
-   * @return {string} date Fecha en formado YYYY-MM-DD
-   */
-  getDate() {
-    let date = new Date();
-    let month = date.getMonth() + 1;
-    month = month < 10 ? "0" + month : month;
-    let day = date.getDate();
-    day = day < 10 ? "0" + day : day;
-    return `${date.getFullYear()}-${month}-${day}`;
-  }
-
   /**
    * Valida una cadena de tipo email
    * @param {*} email Email a validar

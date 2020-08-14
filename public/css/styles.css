@@ -130,7 +130,15 @@ body, #root {
   .makeStyles-drawerClose-8,
   .jss8,
   .makeStyles-drawerClose-29,
-  .jss29 {
+  .jss29,
+  .makeStyles-drawerClose-12,
+  .jss12, 
+  .makeStyles-drawerClose-22,
+  .jss22,
+  .makeStyles-drawerClose-50,
+  .jss50
+  /* .MuiDrawer-paperAnchorLeft */
+  {
     width: 58px !important;
   }
 
