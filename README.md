@@ -21,4 +21,4 @@ Alojada en Firebase Hosting
   
 Para poder utilizar el proyecto en el hosting en Chrome
 
-    Configuración de sitios → Permisos → Permitir la opción Contenido no seguro → Refrescarf la página
+    Configuración de sitios → Permisos → Permitir la opción Contenido no seguro → Refrescar la página
