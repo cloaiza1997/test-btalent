@@ -19,6 +19,6 @@ Alojada en Firebase Hosting
 
   https://test-vectorial-group.web.app/
   
-Para poder utilizar el proyecto en el hosting
+Para poder utilizar el proyecto en el hosting en Chrome
 
     Configuración de sitios → Permisos → Permitir la opción Contenido no seguro → Refrescarf la página
