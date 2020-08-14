@@ -18,3 +18,7 @@ Elaborada con React JS y Redux.
 Alojada en Firebase Hosting
 
   https://test-vectorial-group.web.app/
+  
+Para poder utilizar el proyecto en el hosting
+
+    Configuración de sitios → Permisos → Permitir la opción Contenido no seguro → Refrescarf la página
